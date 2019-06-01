@@ -1,0 +1,48 @@
+version: '3.1'
+services:
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+        - 27017:27017
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+  mysql:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    ports:
+      - 3306:3306
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+  app-pm2:
+      container_name: app-pm2
+      #构建容器
+      build: ./server
+      # 需要链接本地代码时
+      # volumes:
+      #   - ./backend:/usr/src/app
+      ports:
+        - "3000:3000"
+  nginx:
+    restart: always
+    image: nginx
+    ports:
+      - 8091:80
+    #这里的配置/var/www/html 就算容器里没有这个文件夹，也会自动重建    
+    volumes:
+      - ./nginx/conf.d/:/etc/nginx/conf.d
+      - ./www/dist/:/var/www/html/
+      - ./static/:/static/

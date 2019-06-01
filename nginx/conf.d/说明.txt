@@ -1,0 +1,7 @@
+这里nginx的配置
+
+反向代理的时候 proxy_pass的地址不能用localhost或者127.0.0.1
+必须用后台接口服务器镜像的名字
+
+location ~ \.(gif|jpg|png)$  指的是如 http://47.106.219.155:8091/logo.png
+
